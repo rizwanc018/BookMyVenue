@@ -1,8 +1,8 @@
 import type { Kafka, Consumer, EachMessagePayload } from "kafkajs";
 
-interface KafkaConsumer {
+export interface KafkaConsumer {
     connect(): Promise<void>;
-    subscribe(topics: TopicConfig[]): Promise<void>;
+    subscribe(topics: TopicConfig<any>[]): Promise<void>;
     disconnect(): Promise<void>;
 }
 
@@ -21,7 +21,7 @@ export const createConsumer = (kafka: Kafka, groupId: string): KafkaConsumer => 
         console.log("Kafka consumer connected:" + groupId);
     };
 
-    const subscribe = async (topics: TopicConfig[]) => {
+    const subscribe = async (topics: TopicConfig<any>[]) => {
         const topicHandlers = new Map(topics.map(({ topicName, topicHandler }) => [topicName, topicHandler]));
 
         await consumer.subscribe({
